@@ -3,12 +3,13 @@
  * and open the template in the editor.
  */
 package crossword;
+import java.io.Serializable;
 import java.util.LinkedList;
 /**
  *
  * @author arturhebda
  */
-public class Board {
+public class Board implements Serializable {
     private BoardCell[][] board; // (x, y)
     private int rows, cols;
 

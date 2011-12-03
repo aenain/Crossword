@@ -4,6 +4,9 @@
  */
 package crossword;
 import crossword.dictionary.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -16,12 +19,27 @@ public class Crossword {
     private LinkedList<CwEntry> entries;
     private Board b;
     private InteliCwDB cwdb;
-    //private final long ID = -1;
+    private final long ID;
 
     public Crossword(int width, int height, String filename) {
         cwdb = new InteliCwDB(filename);
         entries = new LinkedList<CwEntry>();
         b = new Board(height, width);
+        ID = 0;
+    }
+
+    public Crossword(long id) {
+        ID = id;
+    }
+
+    public void readObject(final ObjectInputStream objectStream) throws IOException, ClassNotFoundException {
+        b = (Board) objectStream.readObject();
+        entries = (LinkedList<CwEntry>) objectStream.readObject();
+    }
+
+    public void writeObject(final ObjectOutputStream objectStream) throws IOException {
+        objectStream.writeObject(b);
+        objectStream.writeObject(entries);
     }
 
     public Iterator<CwEntry> getROEntryIter() {

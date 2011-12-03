@@ -4,13 +4,13 @@
  */
 package crossword;
 
-import java.util.Locale;
+import java.io.Serializable;
 
 /**
  *
  * @author arturhebda
  */
-public class BoardCell {
+public class BoardCell implements Serializable {
     private String content;
     private int possibleLocations;
 

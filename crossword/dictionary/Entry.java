@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 package crossword.dictionary;
-
+import java.io.Serializable;
 /**
  *
  * @author arturhebda
  */
-public class Entry {
+public class Entry implements Serializable {
     private String word;
     private String clue;
 
