@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author arturhebda
  */
 public class BoardCell implements Serializable {
-    private String content;
+    private String content, writenContent;
     private int possibleLocations;
 
     private int col, row;
@@ -19,6 +19,8 @@ public class BoardCell implements Serializable {
     public BoardCell(int col, int row) {
         this.col = col;
         this.row = row;
+        this.content = "";
+        this.writenContent = "";
 
         possibleLocations = 0;
         enableAll();
@@ -27,11 +29,14 @@ public class BoardCell implements Serializable {
     public BoardCell copy() {
         BoardCell copy = new BoardCell(col, row);
 
-        copy.content = this.content;
+        copy.content = this.content.trim(); // smart copy!
+        copy.writenContent = this.writenContent.trim();
         copy.possibleLocations = this.possibleLocations;
 
         return copy;
     }
+
+    public void clear() { writenContent = ""; }
     
     public int getRow() { return row; }
     public int getCol() { return col; }
@@ -76,10 +81,13 @@ public class BoardCell implements Serializable {
     public void setContent(String content) { this.content = content; }
     public String getContent() { return content; }
 
+    public void setWritenContent(String writenContent) { this.writenContent = writenContent; }
+    public String getWritenContent() { return writenContent; }
+
     public void print() { print(""); }
 
     public void print(String separator) {
-        if (content != null)
+        if (! content.isEmpty())
             System.out.print(content.toUpperCase() + separator);
         else
             System.out.print("-" + separator);

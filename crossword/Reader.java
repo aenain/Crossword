@@ -38,6 +38,8 @@ public class Reader implements FileFilter {
         crosswords.clear();
     }
 
+    public LinkedList<Crossword> getCrosswords() { return crosswords; }
+
     public Crossword getCrosswordByID(long id) throws IOException, FileNotFoundException, ClassNotFoundException {
         FileInputStream fileStream = null;
         ObjectInputStream objectStream = null;

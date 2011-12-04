@@ -14,12 +14,23 @@ public class Settings {
     private File crosswordsDirectory;
     private int rows, cols;
     private File databaseFile;
+    private Class strategyClass;
+
+    public static final int MIN_ROWS = 10;
+    public static final int MIN_COLS = 10;
+
+    public static final int MAX_ROWS = 30;
+    public static final int MAX_COLS = 30;
+
+    public static final int DEFAULT_ROWS = 20;
+    public static final int DEFAULT_COLS = 20;
 
     public Settings() {
         crosswordsDirectory = null;
-        rows = 0;
-        cols = 0;
+        rows = Settings.DEFAULT_ROWS;
+        cols = Settings.DEFAULT_COLS;
         databaseFile = null;
+        strategyClass = RealStrategy.class;
     }
 
     public String getCrosswordsDirectoryPath() { 
@@ -40,6 +51,29 @@ public class Settings {
         else
             return "";
     }
+
+    public void setCrosswordsSimpleStrategy(boolean isSelected) {
+        if (isSelected)
+            setCrosswordsStrategyClass(SimpleStrategy.class);
+        else
+            setCrosswordsStrategyClass(RealStrategy.class);
+    }
+
+    public void setCrosswordsStrategyClass(Class strategyClass) {
+        this.strategyClass = strategyClass;
+    }
+
+    public void setCrosswordsStrategyClassByName(String strategyClassName) throws ClassNotFoundException {
+        this.strategyClass = Class.forName(strategyClassName);
+    }
+
+    public boolean isStrategyByName(String strategyName) {
+        return (getCrosswordsStrategyClassName().equals(strategyName));
+    }
+
+    public String getCrosswordsStrategyClassName() { return strategyClass.getSimpleName(); }
+
+    public Class getCrosswordsStrategyClass() { return strategyClass; }
 
     public File getDatabaseFile() { return databaseFile; }
 

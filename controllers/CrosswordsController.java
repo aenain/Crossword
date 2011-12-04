@@ -7,7 +7,9 @@ import crossword.Board;
 import crossword.Crossword;
 import crossword.Settings;
 import crossword.CwBrowser;
-import crossword.TableModel;
+import crossword.RealStrategy;
+import crossword.Strategy;
+import gui.TableModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -36,10 +38,7 @@ public class CrosswordsController extends BaseController {
      */
     // TODO! być może już tutaj rzucać wyjątkiem, że nie ma krzyżówek
     public void prepareCrosswordsList(JComponent[] components) {
-        String currentCrosswordsDirectoryPath = settings.getCrosswordsDirectoryPath();
-
-        if (! currentCrosswordsDirectoryPath.equals(browser.getDirectoryPath()))
-            browser.setDirectory(settings.getCrosswordsDirectory());
+        refreshBrowserDirectory();
 
         JList crosswordsList = (JList) components[0];
         LinkedList<Long> ids = browser.getAllIDs();
@@ -50,20 +49,92 @@ public class CrosswordsController extends BaseController {
 
     /**
      * 
-     * @param CrosswordID
-     * @param components - { crosswordsList, boardTable }
+     * @param components - { boardTable, horizontalClues, verticalClues }
+     * @throws InstantiationException
+     * @throws IllegalAccessException 
+     */
+    public void generateAndShowCrossword(JComponent[] components) throws InstantiationException, IllegalAccessException {
+        crossword = new Crossword(settings.getCols(), settings.getRows(), settings.getDatabaseFilePath());
+        Strategy strategy = (Strategy) settings.getCrosswordsStrategyClass().newInstance();
+        crossword.generate(strategy);
+
+        if (crossword != null)
+            showCrossword(crossword, components);
+    }
+
+    public void saveCrossword() throws IOException {
+        if (crossword != null) {
+            refreshBrowserDirectory();
+            browser.write(crossword);
+        }
+        else {} // TODO! wyjątek?
+    }
+
+    /**
+     * 
+     * @param components - { boardTable }
+     */
+    public void resetCrossword(JComponent[] components) {
+        JTable boardTable = (JTable) components[0];
+
+        if (crossword != null) {
+            crossword.getBoard().clear();
+
+            Board board = crossword.getBoardCopy();
+            boardTable.setModel(tableModel);
+            tableModel.updateBoard(board);
+        } else {} // TODO! wyjątek?
+    }
+    
+    /**
+     * 
+     * @param components - { crosswordsList, boardTable, horizontalClues, verticalClues }
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws ClassNotFoundException 
      */
     public void showCrossword(JComponent[] components) throws IOException, FileNotFoundException, ClassNotFoundException {
         JList crosswordsList = (JList) components[0];
-        JTable boardTable = (JTable) components[1];
-
         Long id = (Long) crosswordsList.getSelectedValue();
-
         crossword = browser.getCrosswordByID(id);
 
         if (crossword != null) {
-            boardTable.setModel(tableModel);
-            tableModel.doMagic(crossword.getBoardCopy());
+            JComponent[] neededComponents = { components[1], components[2], components[3] };
+            showCrossword(crossword, neededComponents);
         }
+    }
+
+    /**
+     * 
+     * @param crossword - crossword to show
+     * @param components - { boardTable, horizontalClues, verticalClues }
+     */
+    private void showCrossword(Crossword crossword, JComponent[] components) {
+        JTable boardTable = (JTable) components[0];
+        JTextArea horizontalClues = (JTextArea) components[1];
+        JTextArea verticalClues = (JTextArea) components[2];
+
+        Board board = crossword.getBoardCopy();
+        boardTable.setModel(tableModel);
+        tableModel.updateBoard(board);
+
+        horizontalClues.setText(prepareCluesList(crossword.getHorizontalClues()));
+        verticalClues.setText(prepareCluesList(crossword.getVerticalClues()));
+    }
+
+    private String prepareCluesList(Object[] clues) {
+        String cluesList = "";
+
+        for (int i = 0; i < clues.length; i++)
+            cluesList += (i + 1) + ". " + (String)(clues[i]) + "\n";
+
+        return cluesList;
+    }
+
+    private void refreshBrowserDirectory() {
+        String currentCrosswordsDirectoryPath = settings.getCrosswordsDirectoryPath();
+
+        if (! currentCrosswordsDirectoryPath.equals(browser.getDirectoryPath()))
+            browser.setDirectory(settings.getCrosswordsDirectory());
     }
 }

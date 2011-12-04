@@ -36,6 +36,12 @@ public class Board implements Serializable {
         return copy;
     }
 
+    public void clear() {
+        for (int col = 0; col < cols; col++)
+            for (int row = 0; row < rows; row++)
+                getCell(col, row).clear();
+    }
+
     public BoardCell[][] getBoard() { return board; } 
 
     public int getWidth() { return cols; }
@@ -68,7 +74,7 @@ public class Board implements Serializable {
 
             for (int y = fromy; y <= toy; y++) {
                 content = board[x][y].getContent();
-                pattern += (content != null) ? content : ".";
+                pattern += (content == null || content.isEmpty()) ? "." : content;
             }
         }
         else if (fromy == toy) { // poziomo
@@ -76,7 +82,7 @@ public class Board implements Serializable {
 
             for (int x = fromx; x <= tox; x++) {
                 content = board[x][y].getContent();
-                pattern += (content != null) ? content : ".";
+                pattern += (content == null || content.isEmpty()) ? "." : content;
             }
         }
         else {

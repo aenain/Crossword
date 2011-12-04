@@ -17,7 +17,7 @@ public class SettingsController extends BaseController {
 
     /**
      * @param settings
-     * @param components - databaseFilePath, crosswordsDirectoryPath, rows, cols 
+     * @param components - databaseFilePath, crosswordsDirectoryPath, rows, cols, simpleStrategy, realStrategy 
      */
     public void saveChanges(JComponent[] components) {
         String databaseFilePath = ((JTextField) components[0]).getText();
@@ -25,6 +25,9 @@ public class SettingsController extends BaseController {
 
         int rows = ((JSlider) components[2]).getValue();
         int cols = ((JSlider) components[3]).getValue();
+
+        JRadioButton simpleStrategy = ((JRadioButton) components[4]);
+        settings.setCrosswordsSimpleStrategy(simpleStrategy.isSelected());
 
         settings.setDatabaseFilePath(databaseFilePath);
         settings.setCrosswordsDirectoryPath(crosswordsDirectoryPath);
@@ -34,7 +37,7 @@ public class SettingsController extends BaseController {
 
     /**
      * @param settings
-     * @param components - databaseFilePath, crosswordsDirectoryPath, rows, cols 
+     * @param components - databaseFilePath, crosswordsDirectoryPath, rows, cols, simpleStrategy, realStrategy 
      */
     public void discardChanges(JComponent[] components) {
         int rows = settings.getRows();
@@ -47,6 +50,9 @@ public class SettingsController extends BaseController {
         ((JTextField) components[1]).setText(crosswordsDirectoryPath);
         ((JSlider) components[2]).setValue(rows);
         ((JSlider) components[3]).setValue(cols);
+
+        ((JRadioButton) components[4]).setSelected(settings.isStrategyByName("SimpleStrategy"));
+        ((JRadioButton) components[5]).setSelected(settings.isStrategyByName("RealStrategy"));
     }
 
     /**

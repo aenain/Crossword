@@ -24,7 +24,7 @@ public class Crossword {
     public Crossword(int width, int height, String filename) {
         cwdb = new InteliCwDB(filename);
         entries = new LinkedList<CwEntry>();
-        b = new Board(height, width);
+        b = new Board(width, height);
         ID = 0;
     }
 
@@ -48,6 +48,28 @@ public class Crossword {
 
     public Board getBoardCopy() {
         return b.copy();
+    }
+
+    public Object[] getHorizontalClues() {
+        return getCluesByDirection(Direction.HORIZ);
+    }
+
+    public Object[] getVerticalClues() {
+        return getCluesByDirection(Direction.VERT);
+    }
+
+    private Object[] getCluesByDirection(Direction dir) {
+        Iterator<CwEntry> entryIterator = getROEntryIter();
+        LinkedList<String> clues = new LinkedList<String>();
+
+        while (entryIterator.hasNext()) {
+            CwEntry entry = entryIterator.next();
+
+            if (entry.getDir() == dir)
+                clues.add(entry.getClue());
+        }
+
+        return clues.toArray();
     }
 
     public Board getBoard() {
@@ -74,7 +96,6 @@ public class Crossword {
 
     public final void addCwEntry(CwEntry cwe, Strategy s) {
         entries.add(cwe);
-        //System.out.println("Crossword#addCwEntry: " + cwe.getWord());
         s.updateBoard(b, cwe);
     }
 

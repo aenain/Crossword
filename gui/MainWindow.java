@@ -12,6 +12,7 @@ package gui;
 
 import controllers.SettingsController;
 import controllers.CrosswordsController;
+import crossword.BoardCell;
 import crossword.Settings;
 import java.io.IOException;
 import javax.swing.UIManager;
@@ -46,11 +47,10 @@ public class MainWindow extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jPopupMenu2 = new javax.swing.JPopupMenu();
         jPopupMenu3 = new javax.swing.JPopupMenu();
+        strategy = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        boardTable = new javax.swing.JTable();
         crosswordsBrowserDialog = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         crosswordsList = new javax.swing.JList();
@@ -58,15 +58,35 @@ public class MainWindow extends javax.swing.JFrame {
         settingsDialog = new javax.swing.JInternalFrame();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         databaseFilePath = new javax.swing.JTextField();
         databaseFilePathChange = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         crosswordsDirectoryPath = new javax.swing.JTextField();
         crosswordsDirectoryPathChange = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
         rows = new javax.swing.JSlider();
         cols = new javax.swing.JSlider();
+        jPanel7 = new javax.swing.JPanel();
+        simpleStrategy = new javax.swing.JRadioButton();
+        realStrategy = new javax.swing.JRadioButton();
         saveSettings = new javax.swing.JButton();
         discardSettings = new javax.swing.JButton();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        horizontalClues = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        verticalClues = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        boardTable = new javax.swing.JTable();
         Menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         PreferencesMenuItem = new javax.swing.JMenuItem();
@@ -79,25 +99,6 @@ public class MainWindow extends javax.swing.JFrame {
         CheckCrosswordMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        boardTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        boardTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        boardTable.setCellSelectionEnabled(true);
-        boardTable.setTableHeader(null);
-        jScrollPane2.setViewportView(boardTable);
-
-        jScrollPane2.setBounds(80, 50, 454, 404);
-        jLayeredPane1.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         crosswordsBrowserDialog.setClosable(true);
         crosswordsBrowserDialog.setTitle("Crosswords Browser");
@@ -117,24 +118,24 @@ public class MainWindow extends javax.swing.JFrame {
         crosswordsBrowserDialog.getContentPane().setLayout(crosswordsBrowserDialogLayout);
         crosswordsBrowserDialogLayout.setHorizontalGroup(
             crosswordsBrowserDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, crosswordsBrowserDialogLayout.createSequentialGroup()
+            .add(crosswordsBrowserDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 118, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 174, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 229, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 93, Short.MAX_VALUE)
                 .add(openCrossword)
                 .addContainerGap())
         );
         crosswordsBrowserDialogLayout.setVerticalGroup(
             crosswordsBrowserDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(crosswordsBrowserDialogLayout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, crosswordsBrowserDialogLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(crosswordsBrowserDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 131, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(openCrossword))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(openCrossword)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        crosswordsBrowserDialog.setBounds(90, 210, 430, 217);
+        crosswordsBrowserDialog.setBounds(50, 137, 460, 280);
         jLayeredPane1.add(crosswordsBrowserDialog, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         settingsDialog.setClosable(true);
@@ -158,7 +159,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        databaseFilePath.setText("jTextField1");
+        jLabel1.setText("Location of Database File");
+
+        databaseFilePath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                databaseFilePathActionPerformed(evt);
+            }
+        });
 
         databaseFilePathChange.setText("Browse");
         databaseFilePathChange.addActionListener(new java.awt.event.ActionListener() {
@@ -167,30 +174,50 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(databaseFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 206, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 43, Short.MAX_VALUE)
+                .add(databaseFilePathChange))
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addContainerGap(198, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(databaseFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(databaseFilePathChange))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .add(databaseFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 185, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(databaseFilePathChange)
-                .addContainerGap())
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(45, 45, 45)
+                .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
-                .add(35, 35, 35)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(databaseFilePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(databaseFilePathChange))
-                .addContainerGap(109, Short.MAX_VALUE))
+                .add(40, 40, 40)
+                .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(246, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Dictionary", jPanel2);
 
-        crosswordsDirectoryPath.setText("jTextField2");
+        jLabel2.setText("Where to save crosswords?");
 
         crosswordsDirectoryPathChange.setText("Browse");
         crosswordsDirectoryPathChange.addActionListener(new java.awt.event.ActionListener() {
@@ -199,37 +226,166 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("How to build them?");
+
+        jLabel4.setText("Rows");
+
+        jLabel5.setText(" Cols");
+
+        jLabel6.setText("Strategy");
+
+        rows.setMaximum(30);
+        rows.setMinimum(10);
+        rows.setMinorTickSpacing(1);
+        rows.setValue(20);
+
+        cols.setMaximum(30);
+        cols.setMinimum(10);
+        cols.setMinorTickSpacing(1);
+        cols.setValue(20);
+
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(cols, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(rows, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(cols, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(rows, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(44, 44, 44))
+        );
+
+        strategy.add(simpleStrategy);
+        simpleStrategy.setText("Simple Strategy");
+        simpleStrategy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                simpleStrategyActionPerformed(evt);
+            }
+        });
+
+        strategy.add(realStrategy);
+        realStrategy.setSelected(true);
+        realStrategy.setText("Real Strategy");
+
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(simpleStrategy)
+                    .add(realStrategy))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .add(7, 7, 7)
+                .add(simpleStrategy)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(realStrategy)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel3))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5Layout.createSequentialGroup()
+                        .add(44, 44, 44)
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel4)
+                            .add(jLabel5)
+                            .add(jPanel5Layout.createSequentialGroup()
+                                .add(jLabel6)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 116, Short.MAX_VALUE)
+                                .add(jPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap(193, Short.MAX_VALUE)
+                        .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel3)
+                .add(17, 17, 17)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jLabel4)
+                        .add(18, 18, 18)
+                        .add(jLabel5)))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(42, 42, 42)
+                        .add(jLabel6))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(26, 26, 26)
+                        .add(jPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel2)
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(25, 25, 25)
+                        .add(crosswordsDirectoryPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 206, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(39, 39, 39)
+                        .add(crosswordsDirectoryPathChange))))
+            .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(crosswordsDirectoryPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(crosswordsDirectoryPathChange))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        );
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .add(64, 64, 64)
-                .add(crosswordsDirectoryPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 206, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(crosswordsDirectoryPathChange)
-                .addContainerGap())
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(117, Short.MAX_VALUE)
-                .add(rows, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(54, 54, 54))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
-                .add(cols, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(53, 53, 53))
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(crosswordsDirectoryPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(crosswordsDirectoryPathChange))
-                .add(18, 18, 18)
-                .add(rows, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(cols, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(45, 45, 45))
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Crosswords", jPanel3);
@@ -254,39 +410,81 @@ public class MainWindow extends javax.swing.JFrame {
             settingsDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(settingsDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 382, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, settingsDialogLayout.createSequentialGroup()
-                .addContainerGap(166, Short.MAX_VALUE)
-                .add(discardSettings)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(saveSettings)
+                .add(settingsDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, settingsDialogLayout.createSequentialGroup()
+                        .add(discardSettings)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(saveSettings))
+                    .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
                 .addContainerGap())
         );
         settingsDialogLayout.setVerticalGroup(
             settingsDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(settingsDialogLayout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, settingsDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 220, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .add(18, 18, 18)
                 .add(settingsDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(saveSettings)
                     .add(discardSettings))
                 .addContainerGap())
         );
 
-        settingsDialog.setBounds(90, 160, 432, 322);
+        settingsDialog.setBounds(20, 30, 520, 520);
         jLayeredPane1.add(settingsDialog, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jScrollPane3.setEnabled(false);
+
+        horizontalClues.setColumns(2);
+        horizontalClues.setEditable(false);
+        horizontalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        horizontalClues.setRows(5);
+        jScrollPane3.setViewportView(horizontalClues);
+
+        jTabbedPane3.addTab("Horizontal", jScrollPane3);
+
+        jScrollPane4.setEnabled(false);
+
+        verticalClues.setColumns(2);
+        verticalClues.setEditable(false);
+        verticalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        verticalClues.setRows(5);
+        jScrollPane4.setViewportView(verticalClues);
+
+        jTabbedPane3.addTab("Vertical", jScrollPane4);
+
+        jTabbedPane3.setBounds(0, 390, 560, 230);
+        jLayeredPane1.add(jTabbedPane3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        boardTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        boardTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        boardTable.setCellSelectionEnabled(true);
+        boardTable.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        boardTable.setTableHeader(null);
+        jScrollPane2.setViewportView(boardTable);
+
+        jScrollPane2.setBounds(10, 10, 540, 370);
+        jLayeredPane1.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
+            .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
+            .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Crossword", jPanel1);
@@ -311,6 +509,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         NewCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         NewCrosswordMenuItem.setText("New");
+        NewCrosswordMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewCrosswordMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(NewCrosswordMenuItem);
 
         OpenCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -324,11 +527,21 @@ public class MainWindow extends javax.swing.JFrame {
 
         SaveCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         SaveCrosswordMenuItem.setText("Save");
+        SaveCrosswordMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveCrosswordMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(SaveCrosswordMenuItem);
         jMenu1.add(jSeparator1);
 
         ResetCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         ResetCrosswordMenuItem.setText("Reset");
+        ResetCrosswordMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetCrosswordMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(ResetCrosswordMenuItem);
 
         CheckCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
@@ -345,15 +558,15 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 634, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 730, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 666, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -363,6 +576,17 @@ public class MainWindow extends javax.swing.JFrame {
         databaseFileChooser = new javax.swing.JFileChooser();
         crosswordsFileChooser = new javax.swing.JFileChooser();
         crosswordsFileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+        boardTable.setDefaultRenderer(BoardCell.class, new MyTableCellRenderer());
+        boardTable.setDefaultEditor(BoardCell.class, new MyTableCellEditor());
+
+        cols.setMinimum(Settings.MIN_COLS);
+        cols.setMaximum(Settings.MAX_COLS);
+        cols.setValue(Settings.DEFAULT_COLS);
+
+        rows.setMinimum(Settings.MIN_ROWS);
+        rows.setMaximum(Settings.MAX_ROWS);
+        rows.setValue(Settings.DEFAULT_ROWS);
     }
 
     private void hideSomeComponents() {
@@ -378,20 +602,20 @@ public class MainWindow extends javax.swing.JFrame {
     private void discardSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardSettingsActionPerformed
         // discard changes in settings dialog
         settingsDialog.setVisible(false);
-        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols };
+        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols, simpleStrategy, realStrategy };
         settingsController.discardChanges(components);
     }//GEN-LAST:event_discardSettingsActionPerformed
 
     private void saveSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSettingsActionPerformed
         // save in settings dialog
         settingsDialog.setVisible(false);
-        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols };
+        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols, simpleStrategy, realStrategy };
         settingsController.saveChanges(components);
     }//GEN-LAST:event_saveSettingsActionPerformed
 
     private void settingsDialogInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_settingsDialogInternalFrameClosed
         // closing settings dialog with close button
-        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols };
+        javax.swing.JComponent[] components = { databaseFilePath, crosswordsDirectoryPath, rows, cols, simpleStrategy, realStrategy };
         settingsController.discardChanges(components);
     }//GEN-LAST:event_settingsDialogInternalFrameClosed
 
@@ -416,7 +640,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void openCrosswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openCrosswordActionPerformed
         // button 'Open' in Crosswords Browser Dialog
-        javax.swing.JComponent[] components = { crosswordsList, boardTable };
+        javax.swing.JComponent[] components = { crosswordsList, boardTable, horizontalClues, verticalClues };
 
         try {
             crosswordsController.showCrossword(components);
@@ -424,6 +648,37 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (IOException e) { System.err.println("ioexception"); }
         catch (ClassNotFoundException e) { System.err.println("classexception"); } // TODO! obsłużyć wyjątki jakoś
     }//GEN-LAST:event_openCrosswordActionPerformed
+
+    private void NewCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCrosswordMenuItemActionPerformed
+        // new in main menu
+        javax.swing.JComponent[] components = { boardTable, horizontalClues, verticalClues };
+
+        try {
+            crosswordsController.generateAndShowCrossword(components);
+        } catch (InstantiationException e) { System.err.println("instantiationexception"); }
+        catch (IllegalAccessException e) { System.err.println("illegalaccessexception"); } // TODO! obsłużyć wyjątki jakoś
+    }//GEN-LAST:event_NewCrosswordMenuItemActionPerformed
+
+    private void simpleStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleStrategyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_simpleStrategyActionPerformed
+
+    private void databaseFilePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_databaseFilePathActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_databaseFilePathActionPerformed
+
+    private void ResetCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetCrosswordMenuItemActionPerformed
+        // clear crossword's board
+        javax.swing.JComponent[] components = { boardTable };
+        crosswordsController.resetCrossword(components);
+    }//GEN-LAST:event_ResetCrosswordMenuItemActionPerformed
+
+    private void SaveCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveCrosswordMenuItemActionPerformed
+        // save crossword
+        try {
+            crosswordsController.saveCrossword();
+        } catch (IOException e) { System.err.println("ioexception"); } // TODO! obsłużyć wyjątek jakoś
+    }//GEN-LAST:event_SaveCrosswordMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -467,23 +722,42 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField databaseFilePath;
     private javax.swing.JButton databaseFilePathChange;
     private javax.swing.JButton discardSettings;
+    private javax.swing.JTextArea horizontalClues;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JButton openCrossword;
+    private javax.swing.JRadioButton realStrategy;
     private javax.swing.JSlider rows;
     private javax.swing.JButton saveSettings;
     private javax.swing.JInternalFrame settingsDialog;
+    private javax.swing.JRadioButton simpleStrategy;
+    private javax.swing.ButtonGroup strategy;
+    private javax.swing.JTextArea verticalClues;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,6 +29,10 @@ public class CwBrowser {
         reader.setDirectory(directory);
     }
 
+    public void write(Crossword crossword) throws IOException {
+        writer.write(crossword);
+    }
+
     public Crossword getCrosswordByID(long id) throws IOException, FileNotFoundException, ClassNotFoundException {
         return reader.getCrosswordByID(id);
     }
