@@ -56,13 +56,17 @@ public class MyTableCellRenderer extends JLabel implements TableCellRenderer {
         int horizStartID = cell.getNearbyHorizStartID();
         int vertStartID = cell.getNearbyVertStartID();
 
+        StringBuilder builder = new StringBuilder();
+        builder.append("<html><span style='font-size: xx-small;'>");
+
         if (horizStartID > 0 && vertStartID > 0)
-            setText("<html><span style='font-size: xx-small;'>" + vertStartID + "," + horizStartID + "</span></html>");
+            builder.append(vertStartID).append(",").append(horizStartID);
         else if (horizStartID > 0)
-            setText("<html><span style='font-size: xx-small;'>" + horizStartID + "</span></html>");
+            builder.append(horizStartID);
         else if (vertStartID > 0)
-            setText("<html><span style='font-size: xx-small;'>" + vertStartID + "</span></html>");
-        else
-            setText("");
+            builder.append(vertStartID);
+
+        builder.append("</span></html>");
+        setText(builder.toString());
     }
 }
