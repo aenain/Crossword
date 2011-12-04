@@ -4,6 +4,7 @@
  */
 package crossword;
 import crossword.dictionary.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,7 +22,7 @@ public class Crossword {
     private InteliCwDB cwdb;
     private final long ID;
 
-    public Crossword(int width, int height, String filename) {
+    public Crossword(int width, int height, String filename) throws FileNotFoundException, IOException {
         cwdb = new InteliCwDB(filename);
         entries = new LinkedList<CwEntry>();
         b = new Board(width, height);

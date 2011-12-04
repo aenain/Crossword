@@ -13,7 +13,7 @@ import java.io.*;
 public class CwDB {
     protected LinkedList<Entry> dict;
 
-    public CwDB(String filename) {
+    public CwDB(String filename) throws FileNotFoundException, IOException {
         dict = new LinkedList<Entry>();
         createDB(filename);
     }
@@ -48,9 +48,11 @@ public class CwDB {
         }
     }
     
-    public void saveDB(String filename) {
+    public void saveDB(String filename) throws IOException {
+        BufferedWriter out = null;
+
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            out = new BufferedWriter(new FileWriter(filename));
             Entry entry;
             
             for (int i = 0; i < dict.size(); i++) {
@@ -60,18 +62,23 @@ public class CwDB {
                 out.write(entry.getClue());
                 out.newLine();
             }
-
-            out.close();
-        } catch(IOException e) { e.printStackTrace(System.out); }
+        } finally {
+            if (out != null)
+                out.close();
+        }
     }
     
     public int getSize() { return dict.size(); }
     
-    protected final void createDB(String filename) {
+    protected final void createDB(String filename) throws FileNotFoundException, IOException {
+        FileInputStream fstream = null;
+        DataInputStream in = null;
+        BufferedReader br = null;
+
         try {
-            FileInputStream fstream = new FileInputStream(filename);
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            fstream = new FileInputStream(filename);
+            in = new DataInputStream(fstream);
+            br = new BufferedReader(new InputStreamReader(in));
  
             String word, clue;
 
@@ -80,6 +87,15 @@ public class CwDB {
             }
 
             in.close();
-        } catch (IOException e) { e.printStackTrace(System.out); }
+        } finally {
+            if (br != null)
+                br.close();
+
+            if (in != null)
+                in.close();
+
+            if (fstream != null)
+                fstream.close();
+        }
     }
 }

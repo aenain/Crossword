@@ -14,6 +14,7 @@ import controllers.SettingsController;
 import controllers.CrosswordsController;
 import crossword.BoardCell;
 import crossword.Settings;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.swing.UIManager;
 
@@ -656,6 +657,7 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             crosswordsController.generateAndShowCrossword(components);
         } catch (InstantiationException e) { System.err.println("instantiationexception"); }
+        catch (FileNotFoundException e) { System.err.println("fileexception"); }
         catch (IllegalAccessException e) { System.err.println("illegalaccessexception"); } // TODO! obsłużyć wyjątki jakoś
     }//GEN-LAST:event_NewCrosswordMenuItemActionPerformed
 

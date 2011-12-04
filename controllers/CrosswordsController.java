@@ -53,7 +53,7 @@ public class CrosswordsController extends BaseController {
      * @throws InstantiationException
      * @throws IllegalAccessException 
      */
-    public void generateAndShowCrossword(JComponent[] components) throws InstantiationException, IllegalAccessException {
+    public void generateAndShowCrossword(JComponent[] components) throws FileNotFoundException, InstantiationException, IllegalAccessException {
         crossword = new Crossword(settings.getCols(), settings.getRows(), settings.getDatabaseFilePath());
         Strategy strategy = (Strategy) settings.getCrosswordsStrategyClass().newInstance();
         crossword.generate(strategy);
@@ -78,9 +78,9 @@ public class CrosswordsController extends BaseController {
         JTable boardTable = (JTable) components[0];
 
         if (crossword != null) {
-            crossword.getBoard().clear();
+            Board board = crossword.getBoard();
+            board.clear();
 
-            Board board = crossword.getBoardCopy();
             boardTable.setModel(tableModel);
             tableModel.updateBoard(board);
         } else {} // TODO! wyjątek?
@@ -114,7 +114,7 @@ public class CrosswordsController extends BaseController {
         JTextArea horizontalClues = (JTextArea) components[1];
         JTextArea verticalClues = (JTextArea) components[2];
 
-        Board board = crossword.getBoardCopy();
+        Board board = crossword.getBoard();
         boardTable.setModel(tableModel);
         tableModel.updateBoard(board);
 

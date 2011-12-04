@@ -15,15 +15,14 @@ import java.util.Date;
  * @author arturhebda
  */
 public class Writer {
-    private String dirPath;
+    private File directory;
 
     public Writer(String dirPath) {
-        this.dirPath = dirPath;
+        this.directory = new File(dirPath);
     }
 
     public void setDirectory(File directory) {
-        if (directory != null)
-            this.dirPath = directory.getAbsolutePath();
+        this.directory = directory;
     }
 
     public void write(Crossword crossword) throws IOException, FileNotFoundException {
@@ -32,7 +31,7 @@ public class Writer {
         ObjectOutputStream objectStream = null;
 
         try {
-            fileStream = new FileOutputStream(dirPath + id);
+            fileStream = new FileOutputStream(new File(directory, Long.toString(id)));
             objectStream = new ObjectOutputStream(fileStream);
 
             crossword.writeObject(objectStream);

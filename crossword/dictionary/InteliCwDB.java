@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 package crossword.dictionary;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 
 /**
@@ -10,7 +12,7 @@ import java.util.LinkedList;
  * @author arturhebda
  */
 public class InteliCwDB extends CwDB {
-    public InteliCwDB(String filename) {
+    public InteliCwDB(String filename) throws FileNotFoundException, IOException {
         super(filename);
     }
 
