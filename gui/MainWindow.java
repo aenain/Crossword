@@ -88,6 +88,11 @@ public class MainWindow extends javax.swing.JFrame {
         verticalClues = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         boardTable = new javax.swing.JTable();
+        errorDialog = new javax.swing.JInternalFrame();
+        errorDescription = new javax.swing.JLabel();
+        errorDialogCloseButton = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        errorStackTrace = new javax.swing.JTextArea();
         Menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         PreferencesMenuItem = new javax.swing.JMenuItem();
@@ -477,6 +482,69 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2.setBounds(10, 10, 540, 370);
         jLayeredPane1.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        errorDialog.setClosable(true);
+        errorDialog.setTitle("Dang!");
+        errorDialog.setVisible(true);
+        errorDialog.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                errorDialogInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+
+        errorDescription.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        errorDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        errorDialogCloseButton.setText("Ok");
+        errorDialogCloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errorDialogCloseButtonActionPerformed(evt);
+            }
+        });
+
+        errorStackTrace.setColumns(20);
+        errorStackTrace.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        errorStackTrace.setRows(5);
+        jScrollPane5.setViewportView(errorStackTrace);
+
+        org.jdesktop.layout.GroupLayout errorDialogLayout = new org.jdesktop.layout.GroupLayout(errorDialog.getContentPane());
+        errorDialog.getContentPane().setLayout(errorDialogLayout);
+        errorDialogLayout.setHorizontalGroup(
+            errorDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, errorDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(errorDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, errorDescription, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                    .add(errorDialogCloseButton))
+                .addContainerGap())
+        );
+        errorDialogLayout.setVerticalGroup(
+            errorDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(errorDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(errorDescription, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(errorDialogCloseButton)
+                .addContainerGap())
+        );
+
+        errorDialog.setBounds(24, 30, 510, 530);
+        jLayeredPane1.add(errorDialog, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -592,6 +660,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void hideSomeComponents() {
         settingsDialog.setVisible(false);
+        errorDialog.setVisible(false);
         crosswordsBrowserDialog.setVisible(false);
     }
 
@@ -646,8 +715,7 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             crosswordsController.showCrossword(components);
             crosswordsBrowserDialog.setVisible(false);
-        } catch (IOException e) { System.err.println("ioexception"); }
-        catch (ClassNotFoundException e) { System.err.println("classexception"); } // TODO! obsłużyć wyjątki jakoś
+        } catch (Exception e) { openErrorDialog(e); }
     }//GEN-LAST:event_openCrosswordActionPerformed
 
     private void NewCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCrosswordMenuItemActionPerformed
@@ -656,9 +724,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         try {
             crosswordsController.generateAndShowCrossword(components);
-        } catch (InstantiationException e) { System.err.println("instantiationexception"); }
-        catch (FileNotFoundException e) { System.err.println("fileexception"); }
-        catch (IllegalAccessException e) { System.err.println("illegalaccessexception"); } // TODO! obsłużyć wyjątki jakoś
+        } catch (Exception e) { openErrorDialog(e); }
     }//GEN-LAST:event_NewCrosswordMenuItemActionPerformed
 
     private void simpleStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleStrategyActionPerformed
@@ -679,8 +745,30 @@ public class MainWindow extends javax.swing.JFrame {
         // save crossword
         try {
             crosswordsController.saveCrossword();
-        } catch (IOException e) { System.err.println("ioexception"); } // TODO! obsłużyć wyjątek jakoś
+        } catch (Exception e) { openErrorDialog(e); }
     }//GEN-LAST:event_SaveCrosswordMenuItemActionPerformed
+
+    private void errorDialogCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorDialogCloseButtonActionPerformed
+        // close error dialog
+        errorDialog.setVisible(false);
+    }//GEN-LAST:event_errorDialogCloseButtonActionPerformed
+
+    private void errorDialogInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_errorDialogInternalFrameClosed
+        // closing error dialog
+        errorDialog.setVisible(false);
+    }//GEN-LAST:event_errorDialogInternalFrameClosed
+
+    private void openErrorDialog(Exception ex) {
+        errorDescription.setText("<html><b>Unfortunately something went wrong.</b><br><br>Please check directory for crosswords and database file's path and format.<br><br>Error type: <b>" + ex.getClass().getName() + "</b></html>");
+        
+        String stackTrace = "";
+
+        for (StackTraceElement stackFrame : ex.getStackTrace())
+            stackTrace += stackFrame.toString() + "\n";
+
+        errorStackTrace.setText(stackTrace);
+        errorDialog.setVisible(true);
+    }
 
     /**
      * @param args the command line arguments
@@ -724,6 +812,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField databaseFilePath;
     private javax.swing.JButton databaseFilePathChange;
     private javax.swing.JButton discardSettings;
+    private javax.swing.JLabel errorDescription;
+    private javax.swing.JInternalFrame errorDialog;
+    private javax.swing.JButton errorDialogCloseButton;
+    private javax.swing.JTextArea errorStackTrace;
     private javax.swing.JTextArea horizontalClues;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -749,6 +841,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
