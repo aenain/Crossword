@@ -36,6 +36,8 @@ public class Board implements Serializable {
         return copy;
     }
 
+    public BoardCell[][] getBoard() { return board; } 
+
     public int getWidth() { return cols; }
     public int getHeight() { return rows; }
 

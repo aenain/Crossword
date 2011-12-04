@@ -29,14 +29,42 @@ public class Reader implements FileFilter {
         crosswords = new LinkedList<Crossword>();
     }
 
+    public void setDirectory(File directory) {
+        if (directory != null) {
+            dirPath = directory.getAbsolutePath();
+            this.directory = directory;
+        }
+        
+        crosswords.clear();
+    }
+
+    public Crossword getCrosswordByID(long id) throws IOException, FileNotFoundException, ClassNotFoundException {
+        FileInputStream fileStream = null;
+        ObjectInputStream objectStream = null;
+
+        try {
+            fileStream = new FileInputStream(new File(directory, Long.toString(id)));
+            objectStream = new ObjectInputStream(fileStream);
+
+            Crossword crossword = new Crossword(id);
+            crossword.readObject(objectStream);
+
+            return crossword;
+        } finally {
+            if (objectStream != null)
+                objectStream.close();
+
+            if (fileStream != null)
+                fileStream.close();
+        }
+    }
+
     public void getAllCws() throws IOException, FileNotFoundException, ClassNotFoundException {
+        crosswords.clear();
+
         File[] files = directory.listFiles(this);
         FileInputStream fileStream = null;
         ObjectInputStream objectStream = null;
-  
-        for (File file : files) {
-            System.out.println(file.getName());
-        }
         
         for (File file : files) {
             try {
@@ -59,7 +87,7 @@ public class Reader implements FileFilter {
 
     @Override
     public boolean accept(File pathname) {
-        Pattern pattern = Pattern.compile("^\\d{13}(\\..*)?$");
+        Pattern pattern = Pattern.compile("^\\d{13}$");
         Matcher matcher = pattern.matcher(pathname.getName());
 
         return matcher.find();
