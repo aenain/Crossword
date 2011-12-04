@@ -719,7 +719,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void preparePrinter() {
         javax.swing.JComponent[] printableComponents = { boardTable, horizontalClues, verticalClues };
-        printer = new Print(printableComponents);
+        String[] headers = { "jCrosswords", "Horizontal", "Vertical" };
+
+        printer = new Print(printableComponents, headers);
     }
 
     private void PreferencesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreferencesMenuItemActionPerformed

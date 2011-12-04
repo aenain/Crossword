@@ -4,6 +4,7 @@
  */
 package gui;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
@@ -19,9 +20,11 @@ import javax.swing.RepaintManager;
  */
 public class Print implements Printable {
     private JComponent[] components;
+    private String[] headers;
 
-    public Print(JComponent[] components) {
+    public Print(JComponent[] components, String[] headers) {
       this.components = components;
+      this.headers = headers;
     }
   
     public void print() throws PrinterException {
@@ -34,14 +37,23 @@ public class Print implements Printable {
 
     @Override
     public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
-        if (pageIndex > 2)
+        if (pageIndex >= components.length)
             return NO_SUCH_PAGE;
 
         Graphics2D g2d = (Graphics2D)g;
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+        g2d.drawString(headers[pageIndex], 0, fontMetrics.getAscent());
+
+        int componentTopOffset = fontMetrics.getHeight() * 2;
+        int componentWidth = (int) pageFormat.getImageableWidth();
+        int componentHeight = (int) pageFormat.getImageableHeight() - componentTopOffset;
+
+        Graphics2D g2dComponent = (Graphics2D) g2d.create(0, componentTopOffset, componentWidth, componentHeight);
 
         disableDoubleBuffering(components[pageIndex]);
-        components[pageIndex].paint(g2d);
+        components[pageIndex].paint(g2dComponent);
         enableDoubleBuffering(components[pageIndex]);
         
         return PAGE_EXISTS;
