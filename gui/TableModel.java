@@ -21,12 +21,14 @@ public class TableModel extends AbstractTableModel {
         data = new Object[1][1];
     }
 
-    public void updateBoard(Board board) {
+    public void updateBoard(Board board, boolean structureChanged) {
         data = board.getBoard();
         columnNames = new String[board.getCols()];
 
         fireTableDataChanged();
-        fireTableStructureChanged();
+
+        if (structureChanged)
+            fireTableStructureChanged();
     }
 
     @Override

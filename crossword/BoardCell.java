@@ -45,7 +45,8 @@ public class BoardCell implements Serializable {
     }
 
     public void clear() { writenContent = ""; }
-    
+    public void check() { writenContent = content; }
+
     public int getRow() { return row; }
     public int getCol() { return col; }
 

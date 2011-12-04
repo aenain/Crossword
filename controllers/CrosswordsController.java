@@ -74,6 +74,23 @@ public class CrosswordsController extends BaseController {
      * 
      * @param components - { boardTable }
      */
+    public void checkCrossword(JComponent[] components) {
+        JTable boardTable = (JTable) components[0];
+
+        if (crossword != null) {
+            Board board = crossword.getBoard();
+            board.check();
+
+            boardTable.setModel(tableModel);
+            tableModel.updateBoard(board, false);
+        }
+        else {} // TODO! wyjątek?
+    }
+
+    /**
+     * 
+     * @param components - { boardTable }
+     */
     public void resetCrossword(JComponent[] components) {
         JTable boardTable = (JTable) components[0];
 
@@ -82,7 +99,7 @@ public class CrosswordsController extends BaseController {
             board.clear();
 
             boardTable.setModel(tableModel);
-            tableModel.updateBoard(board);
+            tableModel.updateBoard(board, false);
         }
         else {} // TODO! wyjątek?
     }
@@ -117,7 +134,7 @@ public class CrosswordsController extends BaseController {
 
         Board board = crossword.getBoard();
         boardTable.setModel(tableModel);
-        tableModel.updateBoard(board);
+        tableModel.updateBoard(board, true);
 
         horizontalClues.setText(prepareCluesList(crossword.getHorizontalClues()));
         verticalClues.setText(prepareCluesList(crossword.getVerticalClues()));

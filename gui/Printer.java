@@ -18,11 +18,11 @@ import javax.swing.RepaintManager;
  * @inspiration http://www.apl.jhu.edu/~hall/java/Swing-Tutorial/Swing-Tutorial-Printing.html
  * @author arturhebda
  */
-public class Print implements Printable {
+public class Printer implements Printable {
     private JComponent[] components;
     private String[] headers;
 
-    public Print(JComponent[] components, String[] headers) {
+    public Printer(JComponent[] components, String[] headers) {
       this.components = components;
       this.headers = headers;
     }
@@ -50,22 +50,26 @@ public class Print implements Printable {
         int componentWidth = (int) pageFormat.getImageableWidth();
         int componentHeight = (int) pageFormat.getImageableHeight() - componentTopOffset;
 
-        Graphics2D g2dComponent = (Graphics2D) g2d.create(0, componentTopOffset, componentWidth, componentHeight);
 
-        disableDoubleBuffering(components[pageIndex]);
-        components[pageIndex].paint(g2dComponent);
-        enableDoubleBuffering(components[pageIndex]);
+        Graphics2D g2dComponent = (Graphics2D) g2d.create(0, componentTopOffset, componentWidth, componentHeight);
+        paintComponent(components[pageIndex], g2dComponent);
         
         return PAGE_EXISTS;
-  }
+    }
 
-  public void disableDoubleBuffering(JComponent c) {
-    RepaintManager currentManager = RepaintManager.currentManager(c);
-    currentManager.setDoubleBufferingEnabled(false);
-  }
+    private void paintComponent(JComponent component, Graphics2D g2d) {
+        disableDoubleBuffering(component);
+        component.paint(g2d);
+        enableDoubleBuffering(component);
+    }
 
-  public void enableDoubleBuffering(JComponent c) {
-    RepaintManager currentManager = RepaintManager.currentManager(c);
-    currentManager.setDoubleBufferingEnabled(true);
-  }
+    public void disableDoubleBuffering(JComponent c) {
+        RepaintManager currentManager = RepaintManager.currentManager(c);
+        currentManager.setDoubleBufferingEnabled(false);
+    }
+
+    public void enableDoubleBuffering(JComponent c) {
+        RepaintManager currentManager = RepaintManager.currentManager(c);
+        currentManager.setDoubleBufferingEnabled(true);
+    }
 }

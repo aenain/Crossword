@@ -42,6 +42,12 @@ public class Board implements Serializable {
                 getCell(row, col).clear();
     }
 
+    public void check() {
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                getCell(row, col).check();
+    }
+
     public BoardCell[][] getBoard() { return board; } 
 
     public int getCols() { return cols; }

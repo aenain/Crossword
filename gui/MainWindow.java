@@ -449,7 +449,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         horizontalClues.setColumns(2);
         horizontalClues.setEditable(false);
-        horizontalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        horizontalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         horizontalClues.setRows(5);
         jScrollPane3.setViewportView(horizontalClues);
 
@@ -459,7 +459,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         verticalClues.setColumns(2);
         verticalClues.setEditable(false);
-        verticalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        verticalClues.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         verticalClues.setRows(5);
         jScrollPane4.setViewportView(verticalClues);
 
@@ -509,7 +509,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        errorDescription.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        errorDescription.setFont(new java.awt.Font("Lucida Grande", 0, 12));
         errorDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         errorDialogCloseButton.setText("Ok");
@@ -520,7 +520,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         errorStackTrace.setColumns(20);
-        errorStackTrace.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        errorStackTrace.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         errorStackTrace.setRows(5);
         jScrollPane5.setViewportView(errorStackTrace);
 
@@ -572,7 +572,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(informalDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, informalDialogCloseButton)
-                    .add(informalMessage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .add(informalMessage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
                 .addContainerGap())
         );
         informalDialogLayout.setVerticalGroup(
@@ -658,6 +658,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         CheckCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         CheckCrosswordMenuItem.setText("Check");
+        CheckCrosswordMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckCrosswordMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(CheckCrosswordMenuItem);
         jMenu1.add(jSeparator2);
 
@@ -714,7 +719,7 @@ public class MainWindow extends javax.swing.JFrame {
         javax.swing.JComponent[] printableComponents = { boardTable, horizontalClues, verticalClues };
         String[] headers = { "jCrosswords", "Horizontal", "Vertical" };
 
-        printer = new Print(printableComponents, headers);
+        printer = new Printer(printableComponents, headers);
     }
 
     private void populateDefaultSettings() {
@@ -837,6 +842,12 @@ public class MainWindow extends javax.swing.JFrame {
         informalDialog.setVisible(false);
     }//GEN-LAST:event_informalDialogCloseButtonActionPerformed
 
+    private void CheckCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckCrosswordMenuItemActionPerformed
+        // check in main menu
+        javax.swing.JComponent[] components = { boardTable };
+        crosswordsController.checkCrossword(components);
+    }//GEN-LAST:event_CheckCrosswordMenuItemActionPerformed
+
     private void openErrorDialog(Exception ex) {
         String errorText = "<html><b>Unfortunately something went wrong.</b><br><br>";
 
@@ -880,7 +891,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
 
-    private Print printer;
+    private Printer printer;
     private Settings settings;
     private SettingsController settingsController;
     private CrosswordsController crosswordsController;
