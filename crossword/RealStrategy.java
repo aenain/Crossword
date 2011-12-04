@@ -129,10 +129,11 @@ public class RealStrategy extends Strategy {
     // TODO! powinna dodać hasło do listy haseł i zaktualizować jego otoczenie
     @Override
     public void updateBoard(Board b, CwEntry e) {
-        BoardCell cell;
+        BoardCell cell, previousCell;
 
         int startRow = e.getRow();
         int startCol = e.getCol();
+
         String word = e.getWord();
         boolean isHoriz = (e.getDir() == Direction.HORIZ);
 
@@ -146,6 +147,11 @@ public class RealStrategy extends Strategy {
         int maxCol = Math.min(endCol + 1, b.getCols() - 1);
 
         if (isHoriz) {
+            if (minCol < startCol) {
+                previousCell = b.getCell(startRow, minCol);
+                previousCell.setNearbyHorizStartID(++horizEntriesCount);
+            }
+
             if (minRow < startRow) {
                 for (int col = startCol; col <= endCol; col++) {
                     cell = b.getCell(minRow, col);
@@ -175,6 +181,11 @@ public class RealStrategy extends Strategy {
                 b.getCell(startRow, maxCol).disableAll();
         }
         else {
+            if (minRow < startRow) {
+                previousCell = b.getCell(minRow, startCol);
+                previousCell.setNearbyVertStartID(++vertEntriesCount);
+            }
+
             if (minCol < startCol) {
                 for (int row = startRow; row <= endRow; row++) {
                     cell = b.getCell(row, minCol);

@@ -34,6 +34,7 @@ public class MainWindow extends javax.swing.JFrame {
         initMyComponents();
         hideSomeComponents();
         preparePrinter();
+        populateDefaultSettings();
     }
 
     /** This method is called from within the constructor to
@@ -700,14 +701,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         boardTable.setDefaultRenderer(BoardCell.class, new MyTableCellRenderer());
         boardTable.setDefaultEditor(BoardCell.class, new MyTableCellEditor());
-
-        cols.setMinimum(Settings.MIN_COLS);
-        cols.setMaximum(Settings.MAX_COLS);
-        cols.setValue(Settings.DEFAULT_COLS);
-
-        rows.setMinimum(Settings.MIN_ROWS);
-        rows.setMaximum(Settings.MAX_ROWS);
-        rows.setValue(Settings.DEFAULT_ROWS);
     }
 
     private void hideSomeComponents() {
@@ -722,6 +715,19 @@ public class MainWindow extends javax.swing.JFrame {
         String[] headers = { "jCrosswords", "Horizontal", "Vertical" };
 
         printer = new Print(printableComponents, headers);
+    }
+
+    private void populateDefaultSettings() {
+        cols.setMinimum(Settings.MIN_COLS);
+        cols.setMaximum(Settings.MAX_COLS);
+        cols.setValue(Settings.DEFAULT_COLS);
+
+        rows.setMinimum(Settings.MIN_ROWS);
+        rows.setMaximum(Settings.MAX_ROWS);
+        rows.setValue(Settings.DEFAULT_ROWS);
+
+        crosswordsDirectoryPath.setText(settings.getCrosswordsDirectoryPath());
+        databaseFilePath.setText(settings.getDatabaseFilePath());
     }
 
     private void PreferencesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreferencesMenuItemActionPerformed
@@ -807,9 +813,6 @@ public class MainWindow extends javax.swing.JFrame {
             crosswordsController.saveCrossword();
             openInformalDialog("Saved successfully!");
         } catch (Exception e) { openErrorDialog(e); }
-        finally {
-            informalDialog.setVisible(false);
-        }
     }//GEN-LAST:event_SaveCrosswordMenuItemActionPerformed
 
     private void errorDialogCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorDialogCloseButtonActionPerformed

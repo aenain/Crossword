@@ -16,20 +16,22 @@ public class Settings {
     private File databaseFile;
     private Class strategyClass;
 
-    public static final int MIN_ROWS = 10;
-    public static final int MIN_COLS = 10;
+    public static final int MIN_ROWS = 4;
+    public static final int MIN_COLS = 5;
 
-    public static final int MAX_ROWS = 30;
-    public static final int MAX_COLS = 30;
+    public static final int MAX_ROWS = 22;
+    public static final int MAX_COLS = 25;
 
     public static final int DEFAULT_ROWS = 20;
     public static final int DEFAULT_COLS = 20;
 
     public Settings() {
-        crosswordsDirectory = null;
+        crosswordsDirectory = new File("/Users/arturhebda/Desktop/crosswords");
+        databaseFile = new File("/Users/arturhebda/Dropbox/AGH/II/Java/lab2.zadanie/cwdb.txt");
+
         rows = Settings.DEFAULT_ROWS;
         cols = Settings.DEFAULT_COLS;
-        databaseFile = null;
+
         strategyClass = RealStrategy.class;
     }
 

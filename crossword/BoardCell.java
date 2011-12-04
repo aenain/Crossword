@@ -7,13 +7,14 @@ package crossword;
 import java.io.Serializable;
 
 /**
- * TODO! TUTAJ POPRAWIŁEM ROWS Z COLS
+ *
  * @author arturhebda
  */
 public class BoardCell implements Serializable {
     private String content, writenContent;
-    private int possibleLocations;
+    private int nearbyHorizStartID, nearbyVertStartID;
 
+    private int possibleLocations;
     private int row, col;
 
     public BoardCell(int row, int col) {
@@ -21,6 +22,9 @@ public class BoardCell implements Serializable {
         this.col = col;
         this.content = "";
         this.writenContent = "";
+
+        this.nearbyHorizStartID = 0;
+        this.nearbyVertStartID = 0;
 
         possibleLocations = 0;
         enableAll();
@@ -31,6 +35,10 @@ public class BoardCell implements Serializable {
 
         copy.content = this.content.trim(); // smart copy!
         copy.writenContent = this.writenContent.trim();
+
+        copy.nearbyHorizStartID = this.nearbyHorizStartID;
+        copy.nearbyVertStartID = this.nearbyVertStartID;
+
         copy.possibleLocations = this.possibleLocations;
 
         return copy;
@@ -40,6 +48,12 @@ public class BoardCell implements Serializable {
     
     public int getRow() { return row; }
     public int getCol() { return col; }
+
+    public int getNearbyHorizStartID() { return nearbyHorizStartID; }
+    public int getNearbyVertStartID() { return nearbyVertStartID; }
+
+    public void setNearbyHorizStartID(int startID) { nearbyHorizStartID = startID; }
+    public void setNearbyVertStartID(int startID) { nearbyVertStartID = startID; }
 
     public final void enableAll() { enable(max()); }
     public final void disableAll() { disable(max()); }

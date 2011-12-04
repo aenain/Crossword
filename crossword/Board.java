@@ -6,7 +6,7 @@ package crossword;
 import java.io.Serializable;
 import java.util.LinkedList;
 /**
- * TODO! TUTAJ POPRAWIŁEM ROWS Z COLS
+ *
  * @author arturhebda
  */
 public class Board implements Serializable {

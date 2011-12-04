@@ -28,21 +28,41 @@ public class MyTableCellRenderer extends JLabel implements TableCellRenderer {
 
         cell = (BoardCell)value;
 
-        if (! cell.getContent().isEmpty())
-            markCellAsWord(cell.getWritenContent());
-        else
-            markCellAsEmpty();
+        setHorizontalAlignment(CENTER);
+        setVerticalAlignment(CENTER);
 
+        if (! cell.getContent().isEmpty())
+            markAsContent(cell.getWritenContent());
+        else
+            markAsEmpty();
+
+        if (cell.getNearbyHorizStartID() > 0 || cell.getNearbyVertStartID() > 0)
+            setStartMarkers(cell);
+            
         return this;
     }
 
-    private void markCellAsWord(String content) {
+    private void markAsContent(String content) {
         setBorder(lineBorder);
         setText(content);
     }
 
-    private void markCellAsEmpty() {
+    private void markAsEmpty() {
         setBorder(emptyBorder);
         setText("");
+    }
+
+    private void setStartMarkers(BoardCell cell) {
+        int horizStartID = cell.getNearbyHorizStartID();
+        int vertStartID = cell.getNearbyVertStartID();
+
+        if (horizStartID > 0 && vertStartID > 0)
+            setText("<html><span style='font-size: xx-small;'>" + vertStartID + "," + horizStartID + "</span></html>");
+        else if (horizStartID > 0)
+            setText("<html><span style='font-size: xx-small;'>" + horizStartID + "</span></html>");
+        else if (vertStartID > 0)
+            setText("<html><span style='font-size: xx-small;'>" + vertStartID + "</span></html>");
+        else
+            setText("");
     }
 }
