@@ -22,10 +22,10 @@ public class Crossword {
     private InteliCwDB cwdb;
     private final long ID;
 
-    public Crossword(int width, int height, String filename) throws FileNotFoundException, IOException {
+    public Crossword(int rows, int cols, String filename) throws FileNotFoundException, IOException {
         cwdb = new InteliCwDB(filename);
         entries = new LinkedList<CwEntry>();
-        b = new Board(width, height);
+        b = new Board(rows, cols);
         ID = 0;
     }
 
@@ -108,9 +108,9 @@ public class Crossword {
     }
 
     public void print() {
-        for (int row = 0; row < b.getHeight(); row++) {
-            for (int col = 0; col < b.getWidth(); col++)
-                b.getCell(col, row).print(" ");
+        for (int row = 0; row < b.getRows(); row++) {
+            for (int col = 0; col < b.getCols(); col++)
+                b.getCell(row, col).print(" ");
 
             System.out.println();
         }

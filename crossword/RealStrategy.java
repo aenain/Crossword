@@ -57,7 +57,7 @@ public class RealStrategy extends Strategy {
                         length = rand(randomExclusiveMax - startCol - 1) + 3;
 
                         for (int col = startCol + 1; col < startCol + length; col++) {
-                            currentCell = board.getCell(col, startRow);
+                            currentCell = board.getCell(startRow, col);
 
                             if (currentCell.canBeHorizInner() && currentCell.canBeHorizEnd())
                                 availableLength++;
@@ -66,7 +66,7 @@ public class RealStrategy extends Strategy {
                         }
 
                         if (availableLength >= 3) {
-                            pattern = board.createPattern(startCol, startRow, startCol + availableLength - 1, startRow);
+                            pattern = board.createPattern(startRow, startCol, startRow, startCol + availableLength - 1);
                             LinkedList<Entry> matchEntries = cwdb.findAll(pattern);
 
                             if (matchEntries.size() > 0) {
@@ -75,7 +75,7 @@ public class RealStrategy extends Strategy {
 
                                     if (! cw.contains(entry.getWord())) {
                                         CwEntry cwEntry = new CwEntry(entry.getWord(), entry.getClue());
-                                        cwEntry.setLocation(startCol, startRow, direction);
+                                        cwEntry.setLocation(startRow, startCol, direction);
 
                                         return cwEntry;
                                     }
@@ -91,7 +91,7 @@ public class RealStrategy extends Strategy {
                         length = rand(randomExclusiveMax - startRow - 2) + 3;
 
                         for (int row = startRow + 1; row < startRow + length; row++) {
-                            currentCell = board.getCell(startCol, row);
+                            currentCell = board.getCell(row, startCol);
 
                             if (currentCell.canBeVertInner() && currentCell.canBeVertEnd())
                                 availableLength++;
@@ -100,7 +100,7 @@ public class RealStrategy extends Strategy {
                         }
 
                         if (availableLength >= 3) {
-                            pattern = board.createPattern(startCol, startRow, startCol, startRow + availableLength - 1);
+                            pattern = board.createPattern(startRow, startCol, startRow + availableLength - 1, startCol);
                             LinkedList<Entry> matchEntries = cwdb.findAll(pattern);
 
                             if (matchEntries.size() > 0) {
@@ -109,7 +109,7 @@ public class RealStrategy extends Strategy {
 
                                     if (! cw.contains(entry.getWord())) {
                                         CwEntry cwEntry = new CwEntry(entry.getWord(), entry.getClue());
-                                        cwEntry.setLocation(startCol, startRow, direction);
+                                        cwEntry.setLocation(startRow, startCol, direction);
 
                                         return cwEntry;
                                     }
@@ -131,8 +131,8 @@ public class RealStrategy extends Strategy {
     public void updateBoard(Board b, CwEntry e) {
         BoardCell cell;
 
-        int startRow = e.getY();
-        int startCol = e.getX();
+        int startRow = e.getRow();
+        int startCol = e.getCol();
         String word = e.getWord();
         boolean isHoriz = (e.getDir() == Direction.HORIZ);
 
@@ -140,15 +140,15 @@ public class RealStrategy extends Strategy {
         int endCol = isHoriz ? startCol + e.getWord().length() - 1 : startCol;
 
         int minRow = Math.max(startRow - 1, 0);
-        int maxRow = Math.min(endRow + 1, b.getHeight() - 1);
+        int maxRow = Math.min(endRow + 1, b.getRows() - 1);
 
         int minCol = Math.max(startCol - 1, 0);
-        int maxCol = Math.min(endCol + 1, b.getWidth() - 1);
+        int maxCol = Math.min(endCol + 1, b.getCols() - 1);
 
         if (isHoriz) {
             if (minRow < startRow) {
                 for (int col = startCol; col <= endCol; col++) {
-                    cell = b.getCell(col, minRow);
+                    cell = b.getCell(minRow, col);
                     cell.disableVertEnd();
                     cell.disableHoriz();
                 }
@@ -156,28 +156,28 @@ public class RealStrategy extends Strategy {
 
             if (maxRow > startRow) {
                 for (int col = startCol; col <= endCol; col++) {
-                    cell = b.getCell(col, maxRow);
+                    cell = b.getCell(maxRow, col);
                     cell.disableVertStart();
                     cell.disableHoriz();
                 }
             }
 
             for (int col = startCol; col <= endCol; col++) {
-                cell = b.getCell(col, startRow);
+                cell = b.getCell(startRow, col);
                 cell.disableHoriz();
                 cell.setContent(word.substring(col - startCol, col - startCol + 1));
             }
 
             if (minCol < startCol)
-                b.getCell(minCol, startRow).disableAll();
+                b.getCell(startRow, minCol).disableAll();
 
             if (maxCol > startCol)
-                b.getCell(maxCol, startRow).disableAll();
+                b.getCell(startRow, maxCol).disableAll();
         }
         else {
             if (minCol < startCol) {
                 for (int row = startRow; row <= endRow; row++) {
-                    cell = b.getCell(minCol, row);
+                    cell = b.getCell(row, minCol);
                     cell.disableHorizEnd();
                     cell.disableVert();
                 }
@@ -185,23 +185,23 @@ public class RealStrategy extends Strategy {
 
             if (maxCol > startCol) {
                 for (int row = startRow; row <= endRow; row++) {
-                    cell = b.getCell(maxCol, row);
+                    cell = b.getCell(row, maxCol);
                     cell.disableHorizStart();
                     cell.disableVert();
                 }
             }
 
             for (int row = startRow; row <= endRow; row++) {
-                cell = b.getCell(startCol, row);
+                cell = b.getCell(row, startCol);
                 cell.disableVert();
                 cell.setContent(word.substring(row - startRow, row - startRow + 1));
             }
 
             if (minRow < startRow)
-                b.getCell(startCol, minRow).disableAll();
+                b.getCell(minRow, startCol).disableAll();
 
             if (maxRow > startRow)
-                b.getCell(startCol, maxRow).disableAll();
+                b.getCell(maxRow, startCol).disableAll();
         }
     }
 

@@ -10,8 +10,7 @@ import crossword.Direction;
  */
 
 public class CwEntry extends Entry {
-    private int x;
-    private int y;
+    private int row, col;
 
     private Direction dir;
 
@@ -19,12 +18,12 @@ public class CwEntry extends Entry {
         super(word, clue);
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public int getRow() { return row; }
+    public int getCol() { return col; }
 
-    public void setLocation(int x, int y, Direction dir) {
-        this.x = x;
-        this.y = y;
+    public void setLocation(int row, int col, Direction dir) {
+        this.row = row;
+        this.col = col;
         this.dir = dir;
     }
 

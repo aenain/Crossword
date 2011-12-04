@@ -7,18 +7,18 @@ package crossword;
 import java.io.Serializable;
 
 /**
- *
+ * TODO! TUTAJ POPRAWIŁEM ROWS Z COLS
  * @author arturhebda
  */
 public class BoardCell implements Serializable {
     private String content, writenContent;
     private int possibleLocations;
 
-    private int col, row;
+    private int row, col;
 
-    public BoardCell(int col, int row) {
-        this.col = col;
+    public BoardCell(int row, int col) {
         this.row = row;
+        this.col = col;
         this.content = "";
         this.writenContent = "";
 
@@ -27,7 +27,7 @@ public class BoardCell implements Serializable {
     }
 
     public BoardCell copy() {
-        BoardCell copy = new BoardCell(col, row);
+        BoardCell copy = new BoardCell(row, col);
 
         copy.content = this.content.trim(); // smart copy!
         copy.writenContent = this.writenContent.trim();

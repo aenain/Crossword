@@ -14,8 +14,7 @@ import controllers.SettingsController;
 import controllers.CrosswordsController;
 import crossword.BoardCell;
 import crossword.Settings;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.awt.print.PrinterException;
 import javax.swing.UIManager;
 
 /**
@@ -34,6 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         initMyComponents();
         hideSomeComponents();
+        preparePrinter();
     }
 
     /** This method is called from within the constructor to
@@ -93,6 +93,9 @@ public class MainWindow extends javax.swing.JFrame {
         errorDialogCloseButton = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         errorStackTrace = new javax.swing.JTextArea();
+        informalDialog = new javax.swing.JInternalFrame();
+        informalMessage = new javax.swing.JLabel();
+        informalDialogCloseButton = new javax.swing.JButton();
         Menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         PreferencesMenuItem = new javax.swing.JMenuItem();
@@ -103,6 +106,8 @@ public class MainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         ResetCrosswordMenuItem = new javax.swing.JMenuItem();
         CheckCrosswordMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        PrintCrosswordMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -234,9 +239,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel3.setText("How to build them?");
 
-        jLabel4.setText("Rows");
+        jLabel4.setText("Columns");
 
-        jLabel5.setText(" Cols");
+        jLabel5.setText("Rows");
 
         jLabel6.setText("Strategy");
 
@@ -545,6 +550,43 @@ public class MainWindow extends javax.swing.JFrame {
         errorDialog.setBounds(24, 30, 510, 530);
         jLayeredPane1.add(errorDialog, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        informalDialog.setClosable(true);
+        informalDialog.setVisible(true);
+
+        informalMessage.setText("jLabel7");
+        informalMessage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        informalDialogCloseButton.setText("Ok");
+        informalDialogCloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                informalDialogCloseButtonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout informalDialogLayout = new org.jdesktop.layout.GroupLayout(informalDialog.getContentPane());
+        informalDialog.getContentPane().setLayout(informalDialogLayout);
+        informalDialogLayout.setHorizontalGroup(
+            informalDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(informalDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(informalDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, informalDialogCloseButton)
+                    .add(informalMessage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        informalDialogLayout.setVerticalGroup(
+            informalDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, informalDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(informalMessage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(informalDialogCloseButton)
+                .addContainerGap())
+        );
+
+        informalDialog.setBounds(140, 210, 280, 160);
+        jLayeredPane1.add(informalDialog, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -616,6 +658,16 @@ public class MainWindow extends javax.swing.JFrame {
         CheckCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         CheckCrosswordMenuItem.setText("Check");
         jMenu1.add(CheckCrosswordMenuItem);
+        jMenu1.add(jSeparator2);
+
+        PrintCrosswordMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        PrintCrosswordMenuItem.setText("Print");
+        PrintCrosswordMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintCrosswordMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(PrintCrosswordMenuItem);
 
         Menu.add(jMenu1);
 
@@ -662,6 +714,12 @@ public class MainWindow extends javax.swing.JFrame {
         settingsDialog.setVisible(false);
         errorDialog.setVisible(false);
         crosswordsBrowserDialog.setVisible(false);
+        informalDialog.setVisible(false);
+    }
+
+    private void preparePrinter() {
+        javax.swing.JComponent[] printableComponents = { boardTable, horizontalClues, verticalClues };
+        printer = new Print(printableComponents);
     }
 
     private void PreferencesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreferencesMenuItemActionPerformed
@@ -745,7 +803,11 @@ public class MainWindow extends javax.swing.JFrame {
         // save crossword
         try {
             crosswordsController.saveCrossword();
+            openInformalDialog("Saved successfully!");
         } catch (Exception e) { openErrorDialog(e); }
+        finally {
+            informalDialog.setVisible(false);
+        }
     }//GEN-LAST:event_SaveCrosswordMenuItemActionPerformed
 
     private void errorDialogCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorDialogCloseButtonActionPerformed
@@ -758,9 +820,29 @@ public class MainWindow extends javax.swing.JFrame {
         errorDialog.setVisible(false);
     }//GEN-LAST:event_errorDialogInternalFrameClosed
 
+    private void PrintCrosswordMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintCrosswordMenuItemActionPerformed
+        try {
+            // print in main menu
+            printer.print();
+        } catch (PrinterException e) { openErrorDialog(e); }
+    }//GEN-LAST:event_PrintCrosswordMenuItemActionPerformed
+
+    private void informalDialogCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informalDialogCloseButtonActionPerformed
+        // closing informal dialog
+        informalDialog.setVisible(false);
+    }//GEN-LAST:event_informalDialogCloseButtonActionPerformed
+
     private void openErrorDialog(Exception ex) {
-        errorDescription.setText("<html><b>Unfortunately something went wrong.</b><br><br>Please check directory for crosswords and database file's path and format.<br><br>Error type: <b>" + ex.getClass().getName() + "</b></html>");
-        
+        String errorText = "<html><b>Unfortunately something went wrong.</b><br><br>";
+
+        if (ex.getClass().getSimpleName().equals("PrinterException"))
+            errorText += "Please check your printer or destination file's location.";
+        else
+            errorText += "Please check directory for crosswords and database file's path and format.";
+
+        errorText += "<br><br>Error type: <b>" + ex.getClass().getName() + "</b></html>";
+        errorDescription.setText(errorText);
+
         String stackTrace = "";
 
         for (StackTraceElement stackFrame : ex.getStackTrace())
@@ -768,6 +850,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         errorStackTrace.setText(stackTrace);
         errorDialog.setVisible(true);
+    }
+
+    private void openInformalDialog(String message) {
+        informalMessage.setText(message);
+        informalDialog.setVisible(true);
     }
 
     /**
@@ -788,6 +875,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
 
+    private Print printer;
     private Settings settings;
     private SettingsController settingsController;
     private CrosswordsController crosswordsController;
@@ -801,6 +889,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem NewCrosswordMenuItem;
     private javax.swing.JMenuItem OpenCrosswordMenuItem;
     private javax.swing.JMenuItem PreferencesMenuItem;
+    private javax.swing.JMenuItem PrintCrosswordMenuItem;
     private javax.swing.JMenuItem ResetCrosswordMenuItem;
     private javax.swing.JMenuItem SaveCrosswordMenuItem;
     private javax.swing.JTable boardTable;
@@ -817,6 +906,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton errorDialogCloseButton;
     private javax.swing.JTextArea errorStackTrace;
     private javax.swing.JTextArea horizontalClues;
+    private javax.swing.JInternalFrame informalDialog;
+    private javax.swing.JButton informalDialogCloseButton;
+    private javax.swing.JLabel informalMessage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -843,6 +935,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;

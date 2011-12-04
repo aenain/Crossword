@@ -23,7 +23,7 @@ public class TableModel extends AbstractTableModel {
 
     public void updateBoard(Board board) {
         data = board.getBoard();
-        columnNames = new String[board.getWidth()];
+        columnNames = new String[board.getCols()];
 
         fireTableDataChanged();
         fireTableStructureChanged();

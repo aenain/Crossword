@@ -6,22 +6,22 @@ package crossword;
 import java.io.Serializable;
 import java.util.LinkedList;
 /**
- *
+ * TODO! TUTAJ POPRAWIŁEM ROWS Z COLS
  * @author arturhebda
  */
 public class Board implements Serializable {
-    private BoardCell[][] board; // (x, y)
+    private BoardCell[][] board; // (y, x)
     private int rows, cols;
 
-    public Board(int cols, int rows) {
-        board = new BoardCell[cols][rows];
+    public Board(int rows, int cols) {
+        board = new BoardCell[rows][cols];
 
         this.rows = rows;
         this.cols = cols;
 
-        for (int col = 0; col < cols; col++)
-            for (int row = 0; row < rows; row++)
-                board[col][row] = new BoardCell(col, row);
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                board[row][col] = new BoardCell(row, col);
 
         setUpCellsAbilities();
     }
@@ -29,30 +29,30 @@ public class Board implements Serializable {
     public Board copy() {
         Board copy = new Board(rows, cols);
 
-        for (int col = 0; col < cols; col++)
-            for (int row = 0; row < rows; row++)
-                copy.setCell(col, row, getCell(col, row).copy());
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                copy.setCell(row, col, getCell(row, col).copy());
 
         return copy;
     }
 
     public void clear() {
-        for (int col = 0; col < cols; col++)
-            for (int row = 0; row < rows; row++)
-                getCell(col, row).clear();
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                getCell(row, col).clear();
     }
 
     public BoardCell[][] getBoard() { return board; } 
 
-    public int getWidth() { return cols; }
-    public int getHeight() { return rows; }
+    public int getCols() { return cols; }
+    public int getRows() { return rows; }
 
     public int size(Direction direction) {
-        return ((direction == Direction.HORIZ) ? getWidth() : getHeight());
+        return ((direction == Direction.HORIZ) ? getCols() : getRows());
     }
 
-    public BoardCell getCell(int x, int y) { return board[x][y]; }
-    public void setCell(int x, int y, BoardCell c) { board[x][y] = c; }
+    public BoardCell getCell(int row, int col) { return board[row][col]; }
+    public void setCell(int row, int col, BoardCell c) { board[row][col] = c; }
 
     public LinkedList<BoardCell> getStartCells() {
         LinkedList<BoardCell> startCells = new LinkedList<BoardCell>();
@@ -65,23 +65,23 @@ public class Board implements Serializable {
         return startCells;
     }
 
-    public String createPattern(int fromx, int fromy, int tox, int toy) {
+    public String createPattern(int fromRow, int fromCol, int toRow, int toCol) {
         String pattern = "";
         String content;
 
-        if (fromx == tox) { // pionowo
-            int x = fromx;
+        if (fromRow == toRow) { // horizontally
+            int row = fromRow;
 
-            for (int y = fromy; y <= toy; y++) {
-                content = board[x][y].getContent();
+            for (int col = fromCol; col <= toCol; col++) {
+                content = board[row][col].getContent();
                 pattern += (content == null || content.isEmpty()) ? "." : content;
             }
         }
-        else if (fromy == toy) { // poziomo
-            int y = fromy;
+        else if (fromCol == toCol) { // vertically
+            int col = fromCol;
 
-            for (int x = fromx; x <= tox; x++) {
-                content = board[x][y].getContent();
+            for (int row = fromRow; row <= toRow; row++) {
+                content = board[row][col].getContent();
                 pattern += (content == null || content.isEmpty()) ? "." : content;
             }
         }
@@ -96,26 +96,26 @@ public class Board implements Serializable {
         // długość słowa to przynajmniej 3 znaki
         // poziomo
         for (int row = 0; row < this.rows; row++) {
-            board[0][row].disableHorizInner();
-            board[this.cols - 1][row].disableHorizInner();
+            board[row][0].disableHorizInner();
+            board[row][this.cols - 1].disableHorizInner();
 
             for (int col = 0; col < 2; col++)
-                board[col][row].disableHorizEnd();
+                board[row][col].disableHorizEnd();
 
             for (int col = this.cols - 3; col < this.cols; col++)
-                board[col][row].disableHorizStart();
+                board[row][col].disableHorizStart();
         }
 
         // pionowo
         for (int col = 0; col < this.cols; col++) {
-            board[col][0].disableVertInner();
-            board[col][this.rows - 1].disableVertInner();
+            board[0][col].disableVertInner();
+            board[this.rows - 1][col].disableVertInner();
 
             for (int row = 0; row < 2; row++)
-                board[col][row].disableVertEnd();
+                board[row][col].disableVertEnd();
 
             for (int row = this.rows - 3; row < this.rows; row++)
-                board[col][row].disableVertStart();
+                board[row][col].disableVertStart();
         }
     }
 }
