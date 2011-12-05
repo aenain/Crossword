@@ -12,22 +12,24 @@ import java.util.LinkedList;
 public class Board implements Serializable {
     private BoardCell[][] board; // (y, x)
     private int rows, cols;
+    private int minWordLength;
 
-    public Board(int rows, int cols) {
+    public Board(int rows, int cols, int minWordLength) {
         board = new BoardCell[rows][cols];
 
         this.rows = rows;
         this.cols = cols;
+        this.minWordLength = minWordLength;
 
         for (int row = 0; row < rows; row++)
             for (int col = 0; col < cols; col++)
                 board[row][col] = new BoardCell(row, col);
 
-        setUpCellsAbilities();
+        setUpCellsAbilities(minWordLength);
     }
 
     public Board copy() {
-        Board copy = new Board(rows, cols);
+        Board copy = new Board(rows, cols, minWordLength);
 
         for (int row = 0; row < rows; row++)
             for (int col = 0; col < cols; col++)
@@ -52,6 +54,7 @@ public class Board implements Serializable {
 
     public int getCols() { return cols; }
     public int getRows() { return rows; }
+    public int getMinWordLength() { return minWordLength; }
 
     public int size(Direction direction) {
         return ((direction == Direction.HORIZ) ? getCols() : getRows());
@@ -63,9 +66,20 @@ public class Board implements Serializable {
     public LinkedList<BoardCell> getStartCells() {
         LinkedList<BoardCell> startCells = new LinkedList<BoardCell>();
 
-        for (BoardCell[] BoardCol : board)
-            for (BoardCell cell : BoardCol)
+        for (BoardCell[] boardRow : board)
+            for (BoardCell cell : boardRow)
                 if (cell.canBeStart())
+                    startCells.add(cell);
+
+        return startCells;
+    }
+
+    public LinkedList<BoardCell> getStartCellsByDirection(Direction direction) {
+        LinkedList<BoardCell> startCells = new LinkedList<BoardCell>();
+
+        for (BoardCell[] boardRow : board)
+            for (BoardCell cell : boardRow)
+                if (cell.canBeStartByDirection(direction))
                     startCells.add(cell);
 
         return startCells;
@@ -98,29 +112,30 @@ public class Board implements Serializable {
         return pattern;
     }
 
-    private void setUpCellsAbilities() {
-        // długość słowa to przynajmniej 3 znaki
+    private void setUpCellsAbilities(int minWordLength) {
         // poziomo
         for (int row = 0; row < this.rows; row++) {
             board[row][0].disableHorizInner();
+            board[row][0].disableHorizStart(); // to put numbers
             board[row][this.cols - 1].disableHorizInner();
 
-            for (int col = 0; col < 2; col++)
+            for (int col = 0; col < minWordLength; col++)
                 board[row][col].disableHorizEnd();
 
-            for (int col = this.cols - 3; col < this.cols; col++)
+            for (int col = this.cols - minWordLength; col < this.cols; col++)
                 board[row][col].disableHorizStart();
         }
 
         // pionowo
         for (int col = 0; col < this.cols; col++) {
             board[0][col].disableVertInner();
+            board[0][col].disableVertStart(); // to put numbers
             board[this.rows - 1][col].disableVertInner();
 
-            for (int row = 0; row < 2; row++)
+            for (int row = 0; row < minWordLength; row++)
                 board[row][col].disableVertEnd();
 
-            for (int row = this.rows - 3; row < this.rows; row++)
+            for (int row = this.rows - minWordLength; row < this.rows; row++)
                 board[row][col].disableVertStart();
         }
     }

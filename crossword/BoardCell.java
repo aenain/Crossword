@@ -14,7 +14,7 @@ public class BoardCell implements Serializable {
     private String content, writenContent;
     private int nearbyHorizStartID, nearbyVertStartID;
 
-    private int possibleLocations;
+    private int possibleLocations, possibleChanges;
     private int row, col;
 
     public BoardCell(int row, int col) {
@@ -27,6 +27,8 @@ public class BoardCell implements Serializable {
         this.nearbyVertStartID = 0;
 
         possibleLocations = 0;
+        possibleChanges = 0;
+
         enableAll();
     }
 
@@ -40,6 +42,7 @@ public class BoardCell implements Serializable {
         copy.nearbyVertStartID = this.nearbyVertStartID;
 
         copy.possibleLocations = this.possibleLocations;
+        copy.possibleChanges = this.possibleChanges;
 
         return copy;
     }
@@ -56,8 +59,12 @@ public class BoardCell implements Serializable {
     public void setNearbyHorizStartID(int startID) { nearbyHorizStartID = startID; }
     public void setNearbyVertStartID(int startID) { nearbyVertStartID = startID; }
 
-    public final void enableAll() { enable(max()); }
-    public final void disableAll() { disable(max()); }
+    public final void enableAll() {
+        possibleChanges = max();
+        enable(max());
+    }
+
+    public final void disableAll() { disable(max(), false); }
 
     public boolean canBeStart() { return canBe(1) || canBe(8); }
 
@@ -65,32 +72,55 @@ public class BoardCell implements Serializable {
         return ((direction == Direction.HORIZ) ? canBeHorizStart() : canBeVertStart());
     }
 
-    public void disableHoriz() { disable(4 + 2 + 1); }
-    public void disableVert() { disable(32 + 16 + 8); }
-    public void disableStart() { disable(8 + 1); }
+    public void disableHoriz() { disableHoriz(false); }
+    public void disableHoriz(boolean softDisabled) { disable(4 + 2 + 1, softDisabled); }
+
+    public void disableVert() { disableVert(false); }
+    public void disableVert(boolean softDisabled) { disable(32 + 16 + 8, softDisabled); }
+
+    public void disableStart() { disableStart(false); }
+    public void disableStart(boolean softDisabled) { disable(8 + 1, softDisabled); }
 
     public boolean canBeHorizStart() { return canBe(1); }
-    public void disableHorizStart() { disable(1); }
+
+    public void disableHorizStart() { disableHorizStart(false); }
+    public void disableHorizStart(boolean softDisabled) { disable(1, softDisabled); }
+
     public void enableHorizStart() { enable(1); }
 
     public boolean canBeHorizInner() { return canBe(2); }
-    public void disableHorizInner() { disable(2); }
+
+    public void disableHorizInner() { disableHorizInner(false); }
+    public void disableHorizInner(boolean softDisabled) { disable(2, softDisabled); }
+
     public void enableHorizInner() { enable(2); }
 
     public boolean canBeHorizEnd() { return canBe(4); }
-    public void disableHorizEnd() { disable(4); }
+
+    public void disableHorizEnd() { disableHorizEnd(false); }
+    public void disableHorizEnd(boolean softDisabled) { disable(4, softDisabled); }
+
     public void enableHorizEnd() { enable(4); }
 
     public boolean canBeVertStart() { return canBe(8); }
-    public void disableVertStart() { disable(8); }
+
+    public void disableVertStart() { disableVertStart(false); }
+    public void disableVertStart(boolean softDisabled) { disable(8, softDisabled); }
+
     public void enableVertStart() { enable(8); }
 
     public boolean canBeVertInner() { return canBe(16); }
-    public void disableVertInner() { disable(16); }
+
+    public void disableVertInner() { disableVertInner(false); }
+    public void disableVertInner(boolean softDisabled) { disable(16, softDisabled); }
+
     public void enableVertInner() { enable(16); }
 
     public boolean canBeVertEnd() { return canBe(32); }
-    public void disableVertEnd() { disable(32); }
+
+    public void disableVertEnd() { disableVertEnd(false); }
+    public void disableVertEnd(boolean softDisabled) { disable(32, softDisabled); }
+    
     public void enableVertEnd() { enable(32); }
 
     public void setContent(String content) { this.content = content; }
@@ -112,12 +142,24 @@ public class BoardCell implements Serializable {
         return (possibleLocations & number) == number;
     }
 
-    private void enable(int number) {
-        possibleLocations |= number;
+    private boolean couldBe(int number) {
+        return canBe(number) || (possibleChanges & number) == number;
     }
 
-    private void disable(int number) {
+    private void enable(int number) {
+        if (couldBe(number)) {
+            possibleLocations |= number;
+            possibleChanges &= (max() - number);
+        }
+    }
+
+    private void disable(int number, boolean softDisabled) {
         possibleLocations &= (max() - number);
+
+        if (softDisabled)
+            possibleChanges |= number;
+        else
+            possibleChanges &= (max() - number);
     }
 
     private int max() { return 32 + 16 + 8 + 4 + 2 + 1; }

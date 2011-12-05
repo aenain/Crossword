@@ -520,7 +520,8 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         errorStackTrace.setColumns(20);
-        errorStackTrace.setFont(new java.awt.Font("Lucida Grande", 0, 10));
+        errorStackTrace.setEditable(false);
+        errorStackTrace.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
         errorStackTrace.setRows(5);
         jScrollPane5.setViewportView(errorStackTrace);
 

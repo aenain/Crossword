@@ -11,7 +11,6 @@ import crossword.Direction;
 
 public class CwEntry extends Entry {
     private int row, col;
-
     private Direction dir;
 
     public CwEntry(String word, String clue) {

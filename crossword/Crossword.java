@@ -25,7 +25,7 @@ public class Crossword {
     public Crossword(int rows, int cols, String filename) throws FileNotFoundException, IOException {
         cwdb = new InteliCwDB(filename);
         entries = new LinkedList<CwEntry>();
-        b = new Board(rows, cols);
+        b = new Board(rows, cols, cwdb.getMinWordLength());
         ID = 0;
     }
 
