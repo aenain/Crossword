@@ -47,6 +47,14 @@ public class Crossword {
         return Collections.unmodifiableList(entries).iterator();
     }
 
+    public int getMinWordLength() {
+        return cwdb.getMinWordLength();    
+    }
+
+    public int getMaxWordLength() {
+        return cwdb.getMaxWordLength();
+    }
+
     public Board getBoardCopy() {
         return b.copy();
     }
@@ -100,7 +108,7 @@ public class Crossword {
         s.updateBoard(b, cwe);
     }
 
-    public final void generate(Strategy s) {
+    public final void generate(Strategy s) throws NoRecordsFoundException, TooSmallBoardException {
         CwEntry e = null;
 
         while ((e = s.findEntry(this)) != null)

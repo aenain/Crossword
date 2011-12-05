@@ -12,8 +12,11 @@ import java.util.LinkedList;
  * @author arturhebda
  */
 public class InteliCwDB extends CwDB {
+    private int minWordLength, maxWordLength;
+
     public InteliCwDB(String filename) throws FileNotFoundException, IOException {
         super(filename);
+        setWordLengthBounds();
     }
 
     public LinkedList<Entry> findAll(String pattern) {
@@ -65,6 +68,31 @@ public class InteliCwDB extends CwDB {
 
         return matches.get(random(matches.size()));
     }
+
+    public int getMinWordLength() { return minWordLength; }
+    public int getMaxWordLength() { return maxWordLength; }
+
+    private void setWordLengthBounds() {
+        if (dict.size() == 0) {
+            minWordLength = 10000;
+            maxWordLength = 0;
+        }
+        else {
+            String word = dict.get(0).getWord();
+
+            minWordLength = word.length();
+            maxWordLength = minWordLength;
+
+            for (int i = 1; i < dict.size(); i++) {
+                word = dict.get(i).getWord();
+
+                if (word.length() < minWordLength)
+                    minWordLength = word.length();
+                else if (word.length() > maxWordLength)
+                    maxWordLength = word.length();
+            }
+        }
+    }
     
     @Override
     public void add(String word, String clue) {
@@ -78,6 +106,11 @@ public class InteliCwDB extends CwDB {
 
         Entry entry = new Entry(word, clue);
         dict.add(i, entry);
+
+        if (word.length() < minWordLength)
+            minWordLength = word.length();
+        else if (word.length() > maxWordLength)
+            maxWordLength = word.length();
     }
 
     protected int random(int exclusiveMax) {

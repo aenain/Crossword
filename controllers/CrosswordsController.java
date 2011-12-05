@@ -9,6 +9,8 @@ import crossword.Settings;
 import crossword.CwBrowser;
 import crossword.RealStrategy;
 import crossword.Strategy;
+import crossword.dictionary.NoRecordsFoundException;
+import crossword.dictionary.TooSmallBoardException;
 import gui.TableModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,7 +55,7 @@ public class CrosswordsController extends BaseController {
      * @throws InstantiationException
      * @throws IllegalAccessException 
      */
-    public void generateAndShowCrossword(JComponent[] components) throws FileNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    public void generateAndShowCrossword(JComponent[] components) throws FileNotFoundException, InstantiationException, IllegalAccessException, IOException, NoRecordsFoundException, TooSmallBoardException {
         crossword = new Crossword(settings.getRows(), settings.getCols(), settings.getDatabaseFilePath());
         Strategy strategy = (Strategy) settings.getCrosswordsStrategyClass().newInstance();
         crossword.generate(strategy);
