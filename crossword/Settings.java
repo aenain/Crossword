@@ -26,8 +26,8 @@ public class Settings {
     public static final int DEFAULT_COLS = 20;
 
     public Settings() {
-        crosswordsDirectory = new File("/Users/arturhebda/Desktop/crosswords");
-        databaseFile = new File("/Users/arturhebda/Dropbox/AGH/II/Java/lab2.zadanie/cwdb.txt");
+        crosswordsDirectory = null;
+        databaseFile = null;
 
         rows = Settings.DEFAULT_ROWS;
         cols = Settings.DEFAULT_COLS;

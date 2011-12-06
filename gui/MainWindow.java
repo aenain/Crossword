@@ -711,7 +711,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void hideSomeComponents() {
-        settingsDialog.setVisible(false);
+        // settingsDialog.setVisible(false);
         errorDialog.setVisible(false);
         crosswordsBrowserDialog.setVisible(false);
         informalDialog.setVisible(false);

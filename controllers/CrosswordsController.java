@@ -9,7 +9,7 @@ import crossword.Settings;
 import crossword.CwBrowser;
 import crossword.Strategy;
 import crossword.dictionary.NoRecordsFoundException;
-import crossword.dictionary.TooSmallBoardException;
+import crossword.TooSmallBoardException;
 import gui.TableModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
