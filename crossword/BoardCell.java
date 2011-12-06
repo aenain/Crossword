@@ -147,18 +147,14 @@ public class BoardCell implements Serializable {
     }
 
     private void enable(int number) {
-        if (couldBe(number)) {
+        if (couldBe(number))
             possibleLocations |= number;
-            possibleChanges &= (max() - number);
-        }
     }
 
     private void disable(int number, boolean softDisabled) {
         possibleLocations &= (max() - number);
 
-        if (softDisabled)
-            possibleChanges |= number;
-        else
+        if (! softDisabled)
             possibleChanges &= (max() - number);
     }
 

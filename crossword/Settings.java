@@ -26,8 +26,8 @@ public class Settings {
     public static final int DEFAULT_COLS = 20;
 
     public Settings() {
-        crosswordsDirectory = null;
-        databaseFile = null;
+        crosswordsDirectory = new File("generated_crosswords");
+        databaseFile = new File("cwdb_order.txt");
 
         rows = Settings.DEFAULT_ROWS;
         cols = Settings.DEFAULT_COLS;
