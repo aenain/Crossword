@@ -27,7 +27,7 @@ public class Settings {
 
     public Settings() {
         crosswordsDirectory = new File("generated_crosswords");
-        databaseFile = new File("cwdb_order.txt");
+        databaseFile = new File("cwdb.txt");
 
         rows = Settings.DEFAULT_ROWS;
         cols = Settings.DEFAULT_COLS;

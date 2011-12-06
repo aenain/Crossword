@@ -37,12 +37,8 @@ public class SimpleStrategy extends Strategy {
 
         int tries = 50;
 
-        if (startCells.size() < 1) {
-            if (horizEntriesCount < vertWordLength)
-                throw new NoRecordsFoundException();
- 
+        if (startCells.size() < 1)
             return null;
-        }
 
         if (wordCount > 0) {
             Direction direciton = Direction.HORIZ;
@@ -72,9 +68,6 @@ public class SimpleStrategy extends Strategy {
                     return cwEntry;
                 }
             }
-
-            if (horizEntriesCount < vertWordLength)
-                throw new NoRecordsFoundException();
         }
         else { // pierwsze słowo
             int length = Math.min(board.getRows(), cw.getMaxWordLength());
