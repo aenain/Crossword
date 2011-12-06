@@ -14,6 +14,7 @@ import controllers.SettingsController;
 import controllers.CrosswordsController;
 import crossword.BoardCell;
 import crossword.Settings;
+import crossword.dictionary.NoRecordsFoundException;
 import java.awt.print.PrinterException;
 import javax.swing.UIManager;
 

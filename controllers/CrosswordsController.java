@@ -7,7 +7,6 @@ import crossword.Board;
 import crossword.Crossword;
 import crossword.Settings;
 import crossword.CwBrowser;
-import crossword.RealStrategy;
 import crossword.Strategy;
 import crossword.dictionary.NoRecordsFoundException;
 import crossword.dictionary.TooSmallBoardException;

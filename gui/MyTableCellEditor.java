@@ -10,6 +10,7 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
 
 /**
@@ -18,6 +19,8 @@ import javax.swing.table.TableCellEditor;
  */
 public class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor {
     JComponent component = new JTextField();
+    LineBorder lineBorder = (LineBorder) LineBorder.createBlackLineBorder();
+
     BoardCell editedCell = null;
 
     public MyTableCellEditor() {
@@ -30,7 +33,10 @@ public class MyTableCellEditor extends AbstractCellEditor implements TableCellEd
         if (isSelected) {}
 
         editedCell = (BoardCell)value;
-        ((JTextField)component).setText(editedCell.getWritenContent());
+        JTextField fieldComponent = (JTextField)component;
+
+        fieldComponent.setText(editedCell.getWritenContent());
+        fieldComponent.setBorder(lineBorder);
 
         return component;
     }
