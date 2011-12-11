@@ -49,22 +49,33 @@ public class CwDB {
     }
     
     public void saveDB(String filename) throws IOException {
-        BufferedWriter out = null;
+        FileOutputStream fstream = null;
+        DataOutputStream out = null;
+        BufferedWriter bw = null;
 
         try {
-            out = new BufferedWriter(new FileWriter(filename));
+            fstream = new FileOutputStream(filename);
+            out = new DataOutputStream(fstream);
+            bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
             Entry entry;
             
             for (int i = 0; i < dict.size(); i++) {
                 entry = dict.get(i);
-                out.write(entry.getWord());
-                out.newLine();
-                out.write(entry.getClue());
-                out.newLine();
+                bw.write(entry.getWord());
+                bw.newLine();
+                bw.write(entry.getClue());
+                bw.newLine();
             }
         } finally {
+            if (bw != null)
+                bw.close();
+
             if (out != null)
                 out.close();
+
+            if (fstream != null)
+                fstream.close();
         }
     }
     
@@ -78,7 +89,7 @@ public class CwDB {
         try {
             fstream = new FileInputStream(filename);
             in = new DataInputStream(fstream);
-            br = new BufferedReader(new InputStreamReader(in));
+            br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
  
             String word, clue;
 
